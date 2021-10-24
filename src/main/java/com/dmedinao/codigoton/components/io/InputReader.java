@@ -12,10 +12,9 @@ import java.util.*;
  * Componente de spring que se encarga de leer el archivo de entrada
  * y generar el correspondiente DTO para dar solución a la solicitud
  *
- * @version 1.0
- *
  * @author Daniel De Jesús Medina Ortega (danielmedina1119@gmail.com) GitHub (dmedinao11)
- * **/
+ * @version 1.0
+ **/
 
 @Component
 public class InputReader {
@@ -27,7 +26,7 @@ public class InputReader {
      *
      * @param file dirección relativa del archivo de entrada
      * @return Una lista de dtos con la información necesaria para una mesa
-     * **/
+     **/
     public LinkedList<InputTableInfoDto> readDataFromFile(String file) throws FileNotFoundException, IllegalArgumentException {
         File inputFile = new File(file);
         List<String> lines = readLines(inputFile);
@@ -40,7 +39,9 @@ public class InputReader {
      *
      * @param file Objeto File del cual se realizará la lectura
      * @return Una lista con las líneas leídas
-     * **/
+     * @throws FileNotFoundException si el archivo no fue encontrado
+     * @throws IllegalArgumentException si el archivo no tiene el formato correcto
+     **/
     private List<String> readLines(File file) throws FileNotFoundException,
             IllegalArgumentException {
         List<String> lines = new LinkedList<>();
@@ -55,13 +56,13 @@ public class InputReader {
     /**
      * Método que construye el DTO input desde una lista de cadenas
      * con las entradas
-     *
+     * <p>
      * El método discrimina si la línea es el nombre de la mesa o un filtro que ha
      * de ser aplicado para la selección de cada mesa
      *
      * @param inputs lista de líneas aceptadas como entrada válida
      * @return Una lista con los dtos por cada mesa
-     * **/
+     **/
 
     private LinkedList<InputTableInfoDto> buildInputTransactionObj(List<String> inputs) {
         LinkedList<InputTableInfoDto> tableRequest = new LinkedList<>();

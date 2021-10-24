@@ -18,4 +18,5 @@ public class OutputDto {
     private String tableName;
     private List<String> codes;
     private boolean canceled;
+    private boolean withError;
 }

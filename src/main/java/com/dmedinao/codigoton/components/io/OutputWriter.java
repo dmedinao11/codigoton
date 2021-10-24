@@ -14,7 +14,8 @@ public class OutputWriter {
 
     private File file;
     private FileWriter writer;
-    private boolean error;
+    private boolean hasError;
+    private OutputDto outputDto;
 
     @PostConstruct
     private void postConstruct() {
@@ -28,7 +29,8 @@ public class OutputWriter {
             writer = new FileWriter(file, false);
 
         } catch (IOException e) {
-            error = true;
+            e.printStackTrace();
+            hasError = true;
         }
 
     }
@@ -42,9 +44,39 @@ public class OutputWriter {
         }
     }
 
-    public void writeOutput(OutputDto toOutput) {
-        System.out.println(toOutput.getTableName());
-        String content = toOutput.isCanceled() ? "CANCELADA" : String.join(",", toOutput.getCodes());
+    /**
+     * Método que acepta un DTO y escribe su información en consola y el archivo output.txt
+     *
+     * @param outputDto DTO con la información de la salida
+     * @throws IOException si el archivo no se puedo escribir correctamente
+     **/
+    public void writeOutput(OutputDto outputDto) throws IOException {
+        this.outputDto = outputDto;
+        writeOnConsole();
+        writeOnFile();
+    }
+
+    /**
+     * Método que escribe la información del DTO en consola
+     **/
+    private void writeOnConsole() {
+        System.out.println(outputDto.getTableName());
+        String content = outputDto.isWithError() ? "ERROR" : outputDto.isCanceled() ? "CANCELADA" : String.join(",", outputDto.getCodes());
         System.out.println(content);
+    }
+
+    /**
+     * Método que escribe la información del DTO en el archivo output.txt
+     *
+     * @throws IOException
+     **/
+    private void writeOnFile() throws IOException {
+        if (!hasError) {
+            writer.write(outputDto.getTableName().concat("\n"));
+            String content = outputDto.isWithError() ? "ERROR" : outputDto.isCanceled() ? "CANCELADA" : String.join(",", outputDto.getCodes());
+            writer.write(content.concat("\n"));
+        } else {
+            System.out.println("Can't write on file :(");
+        }
     }
 }
