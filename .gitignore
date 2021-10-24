@@ -34,4 +34,4 @@ build/
 
 /requirements
 
-output.txt
+./output.txt
