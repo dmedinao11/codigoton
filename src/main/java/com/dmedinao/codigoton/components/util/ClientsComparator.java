@@ -13,7 +13,7 @@ import java.util.Comparator;
  **/
 public class ClientsComparator implements Comparator<ClientDto> {
     /**
-     * Método que compara el balance total de un cliente, colocandolo descendentemente
+     * Método que compara el balance total de un cliente, colocándolo descendentemente
      * y de tener el mismo código las ordenara por el código de usuario
      *
      * @param o1 primer cliente a comparar

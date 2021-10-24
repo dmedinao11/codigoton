@@ -21,7 +21,7 @@ public class InputReader {
 
     /**
      * Método que acepta la dirección de archivo como entrada y entrega
-     * una lista de DTOS, cada uno con la información necesaria para relizar
+     * una lista de DTOS, cada uno con la información necesaria para realizar
      * la selección de una mesa
      *
      * @param file dirección relativa del archivo de entrada
@@ -34,12 +34,12 @@ public class InputReader {
     }
 
     /**
-     * Método que acepta un objeto File y retora una lista con las líneas en dicho
+     * Método que acepta un objeto File y retorna una lista con las líneas en dicho
      * archivo
      *
      * @param file Objeto File del cual se realizará la lectura
      * @return Una lista con las líneas leídas
-     * @throws FileNotFoundException si el archivo no fue encontrado
+     * @throws FileNotFoundException    si el archivo no fue encontrado
      * @throws IllegalArgumentException si el archivo no tiene el formato correcto
      **/
     private List<String> readLines(File file) throws FileNotFoundException,
