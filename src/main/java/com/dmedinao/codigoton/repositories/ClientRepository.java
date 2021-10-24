@@ -4,7 +4,6 @@ import com.dmedinao.codigoton.models.Client;
 import com.dmedinao.codigoton.models.mapper.ClientRowMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,10 +26,6 @@ public class ClientRepository {
 
     public ClientRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public void getAll() {
-        jdbcTemplate.query("select * from client", new ClientRowMapper()).forEach(System.out::println);
     }
 
     public List<Client> getByFilters(String filters) throws DataAccessException {

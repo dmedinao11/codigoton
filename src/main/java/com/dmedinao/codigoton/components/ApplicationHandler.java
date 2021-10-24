@@ -21,7 +21,7 @@ public class ApplicationHandler {
     public void handleTablesEvaluation(String inputFile){
         try {
             LinkedList<InputTableInfoDto> inputs = inputReader.readDataFromFile(inputFile);
-            clientService.resolveTableClientsList(inputs.get(0));
+            clientService.resolveTableClientsList(inputs.get(5));
         } catch (Exception e) {
             e.printStackTrace();
         }

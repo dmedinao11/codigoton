@@ -1,5 +1,6 @@
 package com.dmedinao.codigoton.services.impl;
 
+import com.dmedinao.codigoton.components.httpclient.HttpCryptResolver;
 import com.dmedinao.codigoton.exceptions.InsufficientClientsException;
 import com.dmedinao.codigoton.models.Client;
 import com.dmedinao.codigoton.models.dtos.io.InputTableInfoDto;
@@ -16,10 +17,12 @@ import java.util.Map;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final HttpCryptResolver httpCryptResolver;
 
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, HttpCryptResolver httpCryptResolver) {
         this.clientRepository = clientRepository;
+        this.httpCryptResolver = httpCryptResolver;
     }
 
     @Override
@@ -28,12 +31,10 @@ public class ClientServiceImpl implements ClientService {
         List<Client> filteredClients = clientRepository.getByFilters(filtersString);
         boolean hasNotSufficientClients = filteredClients.size() < 4;
 
-        if(hasNotSufficientClients){
+        if (hasNotSufficientClients) {
             throw new InsufficientClientsException("Number of clients: ".concat(String.valueOf(filteredClients.size())));
         }
-
-
-
+        decryptCodes(filteredClients);
     }
 
     private String getQueryFilters(Map<TableFilters, String> filters) {
@@ -56,5 +57,18 @@ public class ClientServiceImpl implements ClientService {
         }
 
         return String.join(" AND ", filtersString);
+    }
+
+    private void decryptCodes(List<Client> clients) {
+        clients.forEach(client -> {
+            if (client.getEncrypt()) {
+                try {
+                    String decryptedCode = httpCryptResolver.decryptCode(client.getCode());
+                    client.setCode(decryptedCode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
