@@ -3,6 +3,7 @@ package com.dmedinao.codigoton.services.impl;
 import com.dmedinao.codigoton.components.httpclient.HttpCryptResolver;
 import com.dmedinao.codigoton.exceptions.InsufficientClientsException;
 import com.dmedinao.codigoton.models.Client;
+import com.dmedinao.codigoton.models.dtos.ClientDto;
 import com.dmedinao.codigoton.models.dtos.io.InputTableInfoDto;
 import com.dmedinao.codigoton.models.enums.TableFilters;
 import com.dmedinao.codigoton.repositories.ClientRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -26,7 +28,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void resolveTableClientsList(InputTableInfoDto tableInfo) throws InsufficientClientsException {
+    public List<ClientDto> resolveTableClientsList(InputTableInfoDto tableInfo) throws InsufficientClientsException {
         String filtersString = getQueryFilters(tableInfo.getTableFilters());
         List<Client> filteredClients = clientRepository.getByFilters(filtersString);
         boolean hasNotSufficientClients = filteredClients.size() < 4;
@@ -34,7 +36,10 @@ public class ClientServiceImpl implements ClientService {
         if (hasNotSufficientClients) {
             throw new InsufficientClientsException("Number of clients: ".concat(String.valueOf(filteredClients.size())));
         }
+
         decryptCodes(filteredClients);
+
+        return filteredClients.stream().map(this::buildClientDto).collect(Collectors.toList());
     }
 
     private String getQueryFilters(Map<TableFilters, String> filters) {
@@ -70,5 +75,15 @@ public class ClientServiceImpl implements ClientService {
                 }
             }
         });
+    }
+
+    private ClientDto buildClientDto(Client client) {
+        return ClientDto.builder()
+                .id(client.getId())
+                .code(client.getCode())
+                .male(client.getMale())
+                .company(client.getCompany())
+                .balance(client.getBalance())
+                .build();
     }
 }
