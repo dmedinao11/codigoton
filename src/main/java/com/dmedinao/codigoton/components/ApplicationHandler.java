@@ -12,6 +12,15 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Clase con el método que se encarga de controlar y orquestar los distintos componentes para resolver
+ * la solicitud
+ *
+ * @version 1.0
+ *
+ * @author Daniel De Jesús Medina Ortega (danielmedina1119@gmail.com) GitHub (dmedinao11)
+ * **/
+
 @Component
 public class ApplicationHandler {
 
@@ -26,6 +35,19 @@ public class ApplicationHandler {
         this.clientsSelector = clientsSelector;
         this.outputWriter = outputWriter;
     }
+
+    /**
+     * Método que acepta la dirección de archivo como entrada y reliza las
+     * operaciones necesarias para dar respuesta a cada mesa que haya en el
+     * archivo
+     *
+     * @param inputFile dirección relativa del archivo de entrada
+     * @return void
+     *
+     * @version 1.0
+     *
+     * @author Daniel De Jesús Medina Ortega (danielmedina1119@gmail.com) GitHub (dmedinao11)
+     * **/
 
     public void handleTablesEvaluation(String inputFile) {
         LinkedList<InputTableInfoDto> inputs;

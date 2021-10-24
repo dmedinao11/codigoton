@@ -10,9 +10,28 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Clase que resuelve y desencripta los códigos de clientes encriptados
+ *
+ * @version 1.0
+ *
+ * @author Daniel De Jesús Medina Ortega (danielmedina1119@gmail.com) GitHub (dmedinao11)
+ * **/
+
 @Component
 public class HttpCryptResolver {
 
+    /**
+     * Método que recibe el código encriptad, crea la request http para obtener el código.
+     *
+     * De realizar correctamente la solicitud retorna el código desencriptado.
+     *
+     * De lo contrario lanza una exepción común.
+     *
+     * @param cryptCode código de usuario encriptado
+     * @return el código desencriptado traído del request http
+     * @throws Exception
+     * **/
     public String decryptCode(String cryptCode) throws Exception {
         try (final CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String decryptUri = "https://test.evalartapp.com/extapiquest/code_decrypt/";
@@ -21,7 +40,15 @@ public class HttpCryptResolver {
             return readStream(stream);
         }
     }
-
+    /**
+     * Método que recibe el un stream de bytes provenientes de la petición http.
+     *
+     * lanza una excepción si al realizar la lectura de bytes ocurre un error
+     *
+     * @param stream bytes correspondientes a la petición
+     * @return la cadena presente en el stream
+     * @throws IOException
+     * **/
     private String readStream(InputStream stream) throws IOException {
         StringBuilder textBuilder = new StringBuilder();
         try (Reader reader = new BufferedReader(new InputStreamReader(stream, Charset.forName(StandardCharsets.UTF_8.name())))) {

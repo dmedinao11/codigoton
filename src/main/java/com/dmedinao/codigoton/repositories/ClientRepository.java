@@ -8,6 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repositorio JDBC para la tabla cliente
+ *
+ * @author Daniel De Jesús Medina Ortega (danielmedina1119@gmail.com) GitHub (dmedinao11)
+ * @version 1.0
+ **/
 @Repository
 public class ClientRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -28,6 +34,14 @@ public class ClientRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Método del repositorio que obtiene los datos de los clientes
+     * y su balance, de acuerdo a los filtros correctamente escritos en SQL
+     * del parámetro
+     *
+     * @param filters Cadena de filtros escritos en sql. Ejemplo 'c.type = %s'
+     * @return la lista de clientes aceptados por los filtros provenientes de la base de datos
+     **/
     public List<Client> getByFilters(String filters) throws DataAccessException {
         String query = String.format(queryTemplate, filters);
         return jdbcTemplate.query(query, new ClientRowMapper());
